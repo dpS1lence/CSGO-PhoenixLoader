@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSGO_PhoenixLoader.DataModels
+namespace CSGO_PhoenixLoader.System.DataModels
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct Point
+    public struct Rect
     {
-        public int X, Y;
+        public int Left, Top, Right, Bottom;
     }
 }

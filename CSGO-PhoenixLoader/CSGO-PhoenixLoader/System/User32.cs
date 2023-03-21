@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using CSGO_PhoenixLoader.DataModels;
+using CSGO_PhoenixLoader.System.DataModels;
 
 namespace CSGO_PhoenixLoader.System
 {

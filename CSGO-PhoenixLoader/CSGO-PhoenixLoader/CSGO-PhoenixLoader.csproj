@@ -6,12 +6,16 @@
     <RootNamespace>CSGO_PhoenixLoader</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Core\**" />
+    <EmbeddedResource Remove="Core\**" />
+    <None Remove="Core\**" />
+  </ItemGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.WindowsDesktop.App.Wpf" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Core\" />
 	</ItemGroup>
 
 </Project>

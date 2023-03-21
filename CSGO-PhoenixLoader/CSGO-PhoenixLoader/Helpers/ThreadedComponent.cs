@@ -42,7 +42,7 @@ namespace CSGO_PhoenixLoader.Helpers
             {
             }
         }
-        public void Dispose()
+        public virtual void Dispose()
         {
             AllocatedThread.Interrupt();
 
