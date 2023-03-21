@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSGO-PhoenixLoader", "CSGO-PhoenixLoader\CSGO-PhoenixLoader.csproj", "{C3157E3B-E7DF-476B-8263-F3783499CF6D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3157E3B-E7DF-476B-8263-F3783499CF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3157E3B-E7DF-476B-8263-F3783499CF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3157E3B-E7DF-476B-8263-F3783499CF6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3157E3B-E7DF-476B-8263-F3783499CF6D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B1A78AE-D52C-4D09-8CF8-F52D7260F3A3}
+	EndGlobalSection
+EndGlobal
