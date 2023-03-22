@@ -1,6 +1,7 @@
 ﻿
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using CSGO_PhoenixLoader.System;
 using CSGO_PhoenixLoader.System.DataModels;
 
@@ -10,7 +11,7 @@ namespace CSGO_PhoenixLoader.Helpers
     {
         public static Rectangle GetClientRect(IntPtr handle)
         {
-            return User32.ClientToScreen(handle, out var point) && User32.GetClientRect(handle, out Rect rect)
+            return User32.ClientToScreen(handle, out var point) && User32.GetClientRect(handle, out CSGO_PhoenixLoader.System.DataModels.Rect rect)
                 ? new Rectangle(point.X, point.Y, rect.Right - rect.Left, rect.Bottom - rect.Top)
                 : default;
         }
@@ -46,6 +47,24 @@ namespace CSGO_PhoenixLoader.Helpers
                 return false;
             }
             return true;
+        }
+
+        public static T Read<T>(this Process process, IntPtr lpBaseAddress) where T : unmanaged
+        {
+            return Read<T>(process.Handle, lpBaseAddress);
+        }
+
+        public static T Read<T>(this Module module, int offset) where T : unmanaged
+        {
+            return Read<T>(module.Process.Handle, module.ProcessModule.BaseAddress + offset);
+        }
+
+        public static T Read<T>(IntPtr hProcess, IntPtr lpBaseAddress) where T : unmanaged
+        {
+            var size = Marshal.SizeOf<T>();
+            var buffer = (object)default(T);
+            Kernel32.ReadProcessMemory(hProcess, lpBaseAddress, buffer, size, out var lpNumberOfBytesRead);
+            return lpNumberOfBytesRead == size ? (T)buffer : default;
         }
     }
 }

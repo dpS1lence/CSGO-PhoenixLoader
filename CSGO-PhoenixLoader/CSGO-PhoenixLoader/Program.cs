@@ -9,6 +9,7 @@ namespace CSGO_PhoenixLoader
         public static void Main() => new Program().Run();
 
         private GameProcess GameProcess { get; set; }
+        private GameData GameData { get; set; }
 
         public Program()
         {
@@ -20,12 +21,17 @@ namespace CSGO_PhoenixLoader
         public void Ctor()
         {
             GameProcess = new GameProcess();
+            GameData = new GameData(GameProcess);
             GameProcess.Start();
+            GameData.Start();
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
+            GameData.Dispose();
+            GameData = default;
+
             GameProcess.Dispose();
             GameProcess = default;
         }

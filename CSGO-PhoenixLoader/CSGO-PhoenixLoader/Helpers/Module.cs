@@ -9,9 +9,9 @@ namespace CSGO_PhoenixLoader.Helpers
 {
     public class Module : IDisposable
     {
-        private Process Process { get; set; }
+        public Process Process { get; set; }
 
-        private ProcessModule ProcessModule { get; set; }
+        public ProcessModule ProcessModule { get; set; }
 
         public Module(Process process, ProcessModule processModule)
         {

@@ -29,39 +29,17 @@ namespace CSGO_PhoenixLoader.Data
 
         protected override TimeSpan ThreadFrameSleep { get; set; }
 
-        /// <summary>
-        /// Game process.
-        /// </summary>
-        public Process Process { get; private set; }
+        public Process? Process { get; private set; }
 
-        /// <summary>
-        /// Client module.
-        /// </summary>
-        public Module ModuleClient { get; private set; }
+        public Module? ModuleClient { get; private set; }
 
-        /// <summary>
-        /// Engine module.
-        /// </summary>
-        public Module ModuleEngine { get; private set; }
+        public Module? ModuleEngine { get; private set; }
 
-        /// <summary>
-        /// Game window handle.
-        /// </summary>
         private IntPtr WindowHwnd { get; set; }
 
-        /// <summary>
-        /// Game window client rectangle.
-        /// </summary>
         public Rectangle WindowRectangleClient { get; private set; }
 
-        /// <summary>
-        /// Whether game window is active.
-        /// </summary>
         private bool WindowActive { get; set; }
-
-        /// <summary>
-        /// Is game process valid?
-        /// </summary>
         public bool IsValid => WindowActive && !(Process is null) && !(ModuleClient is null) && !(ModuleEngine is null);
 
         public override void Dispose()
@@ -110,32 +88,38 @@ namespace CSGO_PhoenixLoader.Data
 
         private bool EnsureProcessAndModules()
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (Process is null)
             {
                 Process = Process.GetProcessesByName(NAME_PROCESS)
                     .FirstOrDefault();
-            }
-            if (Process is null || !Process.IsRunning())
-            {
-                return false;
+
+                if (Process is null || !Process.IsRunning())
+                {
+                    return false;
+                }
             }
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (ModuleClient is null)
             {
                 ModuleClient = Process.GetModule(NAME_MODULE_CLIENT);
-            }
-            if (ModuleClient is null)
-            {
-                return false;
+
+                if (ModuleClient is null)
+                {
+                    return false;
+                }
             }
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (ModuleEngine is null)
             {
                 ModuleEngine = Process.GetModule(NAME_MODULE_ENGINE);
-            }
-            if (ModuleEngine is null)
-            {
-                return false;
+
+                if (ModuleEngine is null)
+                {
+                    return false;
+                }
             }
 
             return true;
