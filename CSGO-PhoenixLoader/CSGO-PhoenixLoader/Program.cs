@@ -1,6 +1,8 @@
 ﻿using CSGO_PhoenixLoader.Data;
+using CSGO_PhoenixLoader.Graphics;
 using System;
 using System.Windows;
+using Application = System.Windows.Application;
 
 namespace CSGO_PhoenixLoader
 {
@@ -9,7 +11,10 @@ namespace CSGO_PhoenixLoader
         public static void Main() => new Program().Run();
 
         private GameProcess GameProcess { get; set; }
+
         private GameData GameData { get; set; }
+
+        private WindowOverlay WindowOverlay { get; set; }
 
         public Program()
         {
@@ -22,13 +27,20 @@ namespace CSGO_PhoenixLoader
         {
             GameProcess = new GameProcess();
             GameData = new GameData(GameProcess);
+            WindowOverlay = new WindowOverlay(GameProcess);
+
+
             GameProcess.Start();
             GameData.Start();
+            WindowOverlay.Start();
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
+            WindowOverlay.Dispose();
+            WindowOverlay = default;
+
             GameData.Dispose();
             GameData = default;
 
