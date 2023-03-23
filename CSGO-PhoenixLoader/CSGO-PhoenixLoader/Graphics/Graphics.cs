@@ -37,7 +37,6 @@ namespace CSGO_PhoenixLoader.Graphics
             WindowOverlay = windowOverlay;
             GameProcess = gameProcess;
             GameData = gameData;
-            //FpsCounter = new FpsCounter();
 
             InitDevice();
             FontVerdana8 = new Microsoft.DirectX.Direct3D.Font(Device, new Font("Verdana", 8.0f, FontStyle.Regular));

@@ -20,7 +20,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="Microsoft.DirectX">
-	    <HintPath>Lib\Microsoft.DirectX.dll</HintPath>
+	    <HintPath>Lib\dx9.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Microsoft.DirectX.Direct3D">
 	    <HintPath>Lib\Microsoft.DirectX.Direct3D.dll</HintPath>
