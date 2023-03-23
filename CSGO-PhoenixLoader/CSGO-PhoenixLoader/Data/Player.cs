@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CSGO_PhoenixLoader.Common;
 using CSGO_PhoenixLoader.System.DataModels;
+using Microsoft.DirectX;
 
 namespace CSGO_PhoenixLoader.Data
 {
@@ -22,9 +23,10 @@ namespace CSGO_PhoenixLoader.Data
             var origin = gameProcess.Process.Read<Vector3>(addressBase + Offsets.m_VecOrigin);
             var viewOffset = gameProcess.Process.Read<Vector3>(addressBase + Offsets.m_VecViewOffset);
             var eyeAngle = gameProcess.Process.Read<Vector3>(gameProcess.ModuleEngine.Read<IntPtr>(0x59F19C) + 0x4D90);
+            var health = gameProcess.Process.Read<int>(addressBase + 0x100);
             var eyePosition = origin + viewOffset;
 
-            Console.WriteLine($"{eyePosition.X:0.00} {eyePosition.Y:0.00} {eyePosition.Z:0.00} {eyeAngle.X:F2} {eyeAngle.Y:F2}");
+            Console.WriteLine($"{eyePosition.X:0.00} {eyePosition.Y:0.00} {eyePosition.Z:0.00} {eyeAngle.X:F2} {eyeAngle.Y:F2} {health}");
         }
     }
 }

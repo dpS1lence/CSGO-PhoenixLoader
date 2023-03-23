@@ -25,8 +25,8 @@ namespace CSGO_PhoenixLoader.Graphics
             // create window
             Window = new Form
             {
-                Name = "Overlay Window",
-                Text = "Overlay Window",
+                Name = "Phoenix Loader",
+                Text = "Phoenix Loader",
                 MinimizeBox = false,
                 MaximizeBox = false,
                 FormBorderStyle = FormBorderStyle.None,
@@ -48,11 +48,12 @@ namespace CSGO_PhoenixLoader.Graphics
                 User32.SetWindowLong(Window.Handle, User32.GWL_EXSTYLE, (IntPtr)exStyle);
 
                 // set the alpha on the whole window to 255 (solid)
-                User32.SetLayeredWindowAttributes(Window.Handle, 0, 255, User32.LWA_ALPHA);
+                User32.SetLayeredWindowAttributes(Window.Handle, 0, 220, User32.LWA_ALPHA);
             };
             Window.SizeChanged += (sender, args) => ExtendFrameIntoClientArea();
             Window.LocationChanged += (sender, args) => ExtendFrameIntoClientArea();
             Window.Closed += (sender, args) => Application.Current.Shutdown();
+            
 
             // show window
             Window.Show();
@@ -90,7 +91,7 @@ namespace CSGO_PhoenixLoader.Graphics
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                Window.BackColor = Color.Blue; // TODO: temporary
+                //Window.BackColor = Color.Gray; // TODO: temporary
 
                 if (Window.Location != windowRectangleClient.Location || Window.Size != windowRectangleClient.Size)
                 {

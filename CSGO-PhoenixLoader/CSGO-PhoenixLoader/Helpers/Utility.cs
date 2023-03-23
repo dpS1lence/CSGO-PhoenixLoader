@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using CSGO_PhoenixLoader.System;
 using CSGO_PhoenixLoader.System.DataModels;
+using Microsoft.DirectX;
 
 namespace CSGO_PhoenixLoader.Helpers
 {
@@ -31,7 +32,14 @@ namespace CSGO_PhoenixLoader.Helpers
             return process?.Modules.OfType<ProcessModule>()
                 .FirstOrDefault(a => string.Equals(a.ModuleName.ToLower(), moduleName.ToLower()));
         }
-
+        public static bool IsInfinityOrNaN(this float value)
+        {
+            return float.IsNaN(value) || float.IsInfinity(value);
+        }
+        public static bool IsValidScreen(this Vector3 value)
+        {
+            return !value.X.IsInfinityOrNaN() && !value.Y.IsInfinityOrNaN() && value.Z >= 0 && value.Z < 1;
+        }
         public static bool IsRunning(this Process process)
         {
             try

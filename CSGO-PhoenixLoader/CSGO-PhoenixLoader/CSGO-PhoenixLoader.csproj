@@ -18,5 +18,16 @@
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.WindowsDesktop.App.Wpf" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="Microsoft.DirectX">
+	    <HintPath>Lib\Microsoft.DirectX.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Microsoft.DirectX.Direct3D">
+	    <HintPath>Lib\Microsoft.DirectX.Direct3D.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Microsoft.DirectX.Direct3DX">
+	    <HintPath>Lib\Microsoft.DirectX.Direct3DX.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
 
 </Project>

@@ -16,6 +16,8 @@ namespace CSGO_PhoenixLoader
 
         private WindowOverlay WindowOverlay { get; set; }
 
+        private Graphics.Graphics Graphics { get; set; }
+
         public Program()
         {
             Startup += (sender, args) => Ctor();
@@ -28,16 +30,21 @@ namespace CSGO_PhoenixLoader
             GameProcess = new GameProcess();
             GameData = new GameData(GameProcess);
             WindowOverlay = new WindowOverlay(GameProcess);
+            Graphics = new Graphics.Graphics(WindowOverlay, GameProcess, GameData);
 
 
             GameProcess.Start();
             GameData.Start();
             WindowOverlay.Start();
+            Graphics.Start();
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
+            Graphics.Dispose();
+            Graphics = default;
+
             WindowOverlay.Dispose();
             WindowOverlay = default;
 
