@@ -19,7 +19,7 @@ namespace CSGO_PhoenixLoader.Hacks
 
         private const string NAME_MODULE_CLIENT = "client.dll";
 
-        private static VAMemory? Memory { get; set; }
+        //private static Memory? Memory { get; set; }
 
         private static Module? Module { get; set; }
 
@@ -43,7 +43,7 @@ namespace CSGO_PhoenixLoader.Hacks
 
         private static void BhopScript()
         {
-            Memory = new VAMemory("csgo");
+            /*Memory = new VAMemory("csgo");
 
             var localPlayer = Memory.ReadInt32((IntPtr)(_module + Offsets.dwLocalPlayer));
 
@@ -58,7 +58,7 @@ namespace CSGO_PhoenixLoader.Hacks
                         Memory.WriteInt32((IntPtr)_module + Offsets.dwForceJump, 6);
                     }
                 }
-            }
+            }*/
         }
     }
 }
