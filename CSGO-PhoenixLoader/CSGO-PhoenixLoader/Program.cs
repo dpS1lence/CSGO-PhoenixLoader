@@ -32,7 +32,6 @@ namespace CSGO_PhoenixLoader
             //WindowOverlay = new WindowOverlay(GameProcess);
             //Graphics = new Graphics.Graphics(null, null, null);
 
-
             GameProcess.Start();
             GameData.Start();
             //WindowOverlay.Start();
