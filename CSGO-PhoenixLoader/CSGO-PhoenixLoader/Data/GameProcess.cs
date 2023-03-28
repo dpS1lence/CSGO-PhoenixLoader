@@ -94,6 +94,8 @@ namespace CSGO_PhoenixLoader.Data
                 Process = Process.GetProcessesByName(NAME_PROCESS)
                     .FirstOrDefault();
 
+                
+
                 if (Process is null || !Process.IsRunning())
                 {
                     return false;
