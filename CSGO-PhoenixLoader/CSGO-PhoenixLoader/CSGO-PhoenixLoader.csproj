@@ -28,6 +28,9 @@
 	  <Reference Include="Microsoft.DirectX.Direct3DX">
 	    <HintPath>Lib\Microsoft.DirectX.Direct3DX.dll</HintPath>
 	  </Reference>
+		<Reference Include="VAMemory">
+			<HintPath>Lib\VAMemory.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 </Project>
