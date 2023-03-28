@@ -2,10 +2,9 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using CSGO_PhoenixLoader.Common;
 using CSGO_PhoenixLoader.System;
 using CSGO_PhoenixLoader.System.DataModels;
-using Microsoft.DirectX;
-
 namespace CSGO_PhoenixLoader.Helpers
 {
     public static class Utility
@@ -73,6 +72,50 @@ namespace CSGO_PhoenixLoader.Helpers
             var buffer = (object)default(T);
             Kernel32.ReadProcessMemory(hProcess, lpBaseAddress, buffer, size, out var lpNumberOfBytesRead);
             return lpNumberOfBytesRead == size ? (T)buffer : default;
+        }
+
+        public static void Write<T>(this Process process, IntPtr lpBaseAddress, object value)
+        {
+            Write<T>(process.Handle, lpBaseAddress, value);
+        }
+
+        public static void Write<T>(this Module module, int offset, object value)
+        {
+            Write<T>(module.Process.Handle, module.ProcessModule.BaseAddress + offset, value);
+        }
+
+        public static void Write<T>(IntPtr processHandle, IntPtr lpBaseAddress, object value)
+        {
+            var bufffer = StructureToByteArray(value);
+            Kernel32.WriteProcessMemory(processHandle, lpBaseAddress, bufffer, bufffer.Length, out var lpNumberOfBytesWritten);
+        }
+        public static Team ToTeam(this int teamNum)
+        {
+            switch (teamNum)
+            {
+                case 1:
+                    return Team.Spectator;
+                case 2:
+                    return Team.Terrorists;
+                case 3:
+                    return Team.CounterTerrorists;
+                default:
+                    return Team.Unknown;
+            }
+        }
+        public static byte[] StructureToByteArray(object obj)
+        {
+            int len = Marshal.SizeOf(obj);
+
+            byte[] arr = new byte[len];
+
+            IntPtr ptr = Marshal.AllocHGlobal(len);
+
+            Marshal.StructureToPtr(obj, ptr, true);
+            Marshal.Copy(ptr, arr, 0, len);
+            Marshal.FreeHGlobal(ptr);
+
+            return arr;
         }
     }
 }

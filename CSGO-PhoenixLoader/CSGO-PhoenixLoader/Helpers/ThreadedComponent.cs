@@ -15,7 +15,7 @@ namespace CSGO_PhoenixLoader.Helpers
         protected virtual TimeSpan ThreadFrameSleep { get; set; } = new TimeSpan(0, 0, 0, 1);
 
 
-        private  Thread AllocatedThread { get; set; }
+        protected  Thread AllocatedThread { get; set; }
 
         protected ThreadedComponent()
         {
