@@ -56,14 +56,14 @@ namespace CSGO_PhoenixLoader.Hacks
                 }
 
                 // check if aim ray intersects any hitboxes of entity
-                var hitBoxId = IntersectsHitBox(aimRayWorld, entity);
+                /*var hitBoxId = IntersectsHitBox(aimRayWorld, entity);
                 if (hitBoxId >= 0)
                 {
                     // shoot
                     Utility.MouseLeftDown();
                     Utility.MouseLeftUp();
                     Thread.Sleep(5);
-                }
+                }*/
             }
         }
 

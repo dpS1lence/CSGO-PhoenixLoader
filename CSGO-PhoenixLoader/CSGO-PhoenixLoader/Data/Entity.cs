@@ -22,7 +22,8 @@ namespace CSGO_PhoenixLoader.Data
         public Offsets Offsets { get; set; }
 
         /// <summary />
-        public Entity(int index, Offsets offsets)
+        public Entity(int index, Offsets offsets) 
+            : base(offsets)
         {
             Index = index;
             Offsets = offsets;

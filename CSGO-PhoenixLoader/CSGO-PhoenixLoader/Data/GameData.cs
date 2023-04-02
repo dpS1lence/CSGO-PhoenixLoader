@@ -26,8 +26,8 @@ namespace CSGO_PhoenixLoader.Data
         public GameData(GameProcess gameProcess, Offsets _offsets)
         {
             GameProcess = gameProcess;
-            Player = new Player(offsets);
             offsets = _offsets;
+            Player = new Player(offsets);
             Entities = Enumerable.Range(0, 64).Select(i => new Entity(i, offsets)).ToArray();
         }
 
