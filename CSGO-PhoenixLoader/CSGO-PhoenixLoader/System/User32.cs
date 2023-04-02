@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using CSGO_PhoenixLoader.Data;
 using CSGO_PhoenixLoader.System.DataModels;
 using Point = System.Drawing.Point;
 
@@ -40,6 +41,9 @@ namespace CSGO_PhoenixLoader.System
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint SendInput(uint nInputs, ref Input pInputs, int cbSize);
     }
 
 }

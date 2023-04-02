@@ -3,12 +3,37 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using CSGO_PhoenixLoader.Common;
+using CSGO_PhoenixLoader.Data;
 using CSGO_PhoenixLoader.System;
 using CSGO_PhoenixLoader.System.DataModels;
 namespace CSGO_PhoenixLoader.Helpers
 {
     public static class Utility
     {
+        private const double _PI_Over_180 = Math.PI / 180.0;
+
+        private const double _180_Over_PI = 180.0 / Math.PI;
+
+        public static double DegreeToRadian(this double degree)
+        {
+            return degree * _PI_Over_180;
+        }
+
+        public static double RadianToDegree(this double radian)
+        {
+            return radian * _180_Over_PI;
+        }
+
+        public static float DegreeToRadian(this float degree)
+        {
+            return (float)(degree * _PI_Over_180);
+        }
+
+        public static float RadianToDegree(this float radian)
+        {
+            return (float)(radian * _180_Over_PI);
+        }
+
         public static Rectangle GetClientRect(IntPtr handle)
         {
             return User32.ClientToScreen(handle, out var point) && User32.GetClientRect(handle, out CSGO_PhoenixLoader.System.DataModels.Rect rect)
@@ -39,6 +64,7 @@ namespace CSGO_PhoenixLoader.Helpers
         {
             return !value.X.IsInfinityOrNaN() && !value.Y.IsInfinityOrNaN() && value.Z >= 0 && value.Z < 1;
         }
+
         public static bool IsRunning(this Process process)
         {
             try
@@ -116,6 +142,32 @@ namespace CSGO_PhoenixLoader.Helpers
             Marshal.FreeHGlobal(ptr);
 
             return arr;
+        }
+
+        public static void MouseLeftDown()
+        {
+            var mouseMoveInput = new Input
+            {
+                type = SendInputEventType.InputMouse,
+                mi =
+                {
+                    dwFlags = MouseEventFlags.MOUSEEVENTF_LEFTDOWN
+                },
+            };
+            User32.SendInput(1, ref mouseMoveInput, Marshal.SizeOf<Input>());
+        }
+
+        public static void MouseLeftUp()
+        {
+            var mouseMoveInput = new Input
+            {
+                type = SendInputEventType.InputMouse,
+                mi =
+                {
+                    dwFlags = MouseEventFlags.MOUSEEVENTF_LEFTUP
+                },
+            };
+            User32.SendInput(1, ref mouseMoveInput, Marshal.SizeOf<Input>());
         }
     }
 }

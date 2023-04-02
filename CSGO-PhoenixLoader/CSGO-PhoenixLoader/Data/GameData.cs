@@ -53,7 +53,7 @@ namespace CSGO_PhoenixLoader.Data
                 string.Equals(m.ModuleName, "client.dll", StringComparison.OrdinalIgnoreCase)).BaseAddress;
             var glowManager = GameProcess.Process.Read<IntPtr>(baseAddress +
                                                                offsets.Signatures.DwGlowObjectManager);
-           
+            Player.Update(GameProcess);
             foreach (var entity in Entities)
             {
                 //entity.Update(GameProcess);
@@ -88,6 +88,8 @@ namespace CSGO_PhoenixLoader.Data
                 float a = 1;
                 GameProcess.Process.Write<GlowStruct>(glowManager + (glowIndex * 0x38) + 0x8, struct1);
                 GameProcess.Process.Write<GlowSettingsStruct>(glowManager + (glowIndex * 0x38) + 0x28, glowSettingsStruct);
+
+                entity.Update(GameProcess);
             }
         }
     }
