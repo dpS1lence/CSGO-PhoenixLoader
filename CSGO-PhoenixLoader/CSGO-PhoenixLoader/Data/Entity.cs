@@ -1,5 +1,4 @@
-﻿using CSGO_PhoenixLoader.Common;
-using CSGO_PhoenixLoader.Helpers;
+﻿using CSGO_PhoenixLoader.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using CSGO_PhoenixLoader.System.DataModels;
+using CSGO_PhoenixLoader.Common.GlobalConstants;
 
 namespace CSGO_PhoenixLoader.Data
 {
@@ -19,11 +19,13 @@ namespace CSGO_PhoenixLoader.Data
 
         private IntPtr AddressStudioHdr { get; set; }
 
+        public Offsets Offsets { get; set; }
+
         /// <summary />
-        public Entity(int index)
+        public Entity(int index, Offsets offsets)
         {
             Index = index;
-            
+            Offsets = offsets;
         }
 
         public override bool IsAlive()
@@ -32,7 +34,7 @@ namespace CSGO_PhoenixLoader.Data
         }
         protected override IntPtr ReadAddressBase(GameProcess gameProcess)
         {
-            return gameProcess.ModuleClient.Read<IntPtr>(Offsets.dwEntityList + Index * 0x10 /* size */);
+            return gameProcess.ModuleClient.Read<IntPtr>(Offsets.Signatures.DwEntityList + Index * 0x10 /* size */);
         }
 
         public override bool Update(GameProcess gameProcess)

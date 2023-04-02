@@ -19,6 +19,9 @@
 		<FrameworkReference Include="Microsoft.WindowsDesktop.App.Wpf" />
 	</ItemGroup>
 	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Reference Include="Microsoft.DirectX">
 	    <HintPath>Lib\dx9.dll</HintPath>
 	  </Reference>

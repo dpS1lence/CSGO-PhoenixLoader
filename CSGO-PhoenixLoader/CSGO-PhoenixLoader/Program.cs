@@ -2,6 +2,9 @@
 using CSGO_PhoenixLoader.Graphics;
 using System;
 using System.Windows;
+using CSGO_PhoenixLoader.Common;
+using CSGO_PhoenixLoader.Common.GlobalConstants;
+using CSGO_PhoenixLoader.Hacks;
 using Application = System.Windows.Application;
 
 namespace CSGO_PhoenixLoader
@@ -16,6 +19,10 @@ namespace CSGO_PhoenixLoader
 
         private WindowOverlay WindowOverlay { get; set; }
 
+        private BHop BHop { get; set; }
+
+        private Offsets Offsets { get; set; }
+
         //private Graphics.Graphics Graphics { get; set; }
 
         public Program()
@@ -27,11 +34,17 @@ namespace CSGO_PhoenixLoader
         /// <summary />
         public void Ctor()
         {
+            Offsets = OffsetsService.GetAllOffsetsJson("https://raw.githubusercontent.com/frk1/hazedumper/master/csgo.json")
+                      ?? throw new ArgumentException("");
+
             GameProcess = new GameProcess();
-            GameData = new GameData(GameProcess);
+            GameData = new GameData(GameProcess, Offsets);
+            BHop = new BHop(Offsets);
+
             //WindowOverlay = new WindowOverlay(GameProcess);
             //Graphics = new Graphics.Graphics(null, null, null);
 
+            BHop.Start();
             GameProcess.Start();
             GameData.Start();
             //WindowOverlay.Start();

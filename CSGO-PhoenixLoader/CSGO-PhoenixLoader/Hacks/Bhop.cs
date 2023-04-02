@@ -7,59 +7,59 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using CSGO_PhoenixLoader.Helpers;
+using CSGO_PhoenixLoader.Common.GlobalConstants;
+using CSGO_PhoenixLoader.Data;
 
 namespace CSGO_PhoenixLoader.Hacks
 {
-    public class Bhop
+    public class BHop : ThreadedComponent
     {
-        [DllImport("User32.dll")]
-        private static extern short GetAsyncKeyState(Int32 vKey);
-
         private const string NAME_PROCESS = "csgo";
 
-        private const string NAME_MODULE_CLIENT = "client.dll";
+        public BHop(Offsets offsets)
+        {
+            _offsets = offsets;
+        }
 
-        //private static Memory? Memory { get; set; }
+        [DllImport("User32.dll")]
+        private static extern short GetAsyncKeyState(int vKey);
 
-        private static Module? Module { get; set; }
+        private static Process ProcessCs { get; set; } = null!;
 
-        private static Process? ProcessCs { get; set; }
+        private static Offsets _offsets = null!;
 
-        private static int _module = 0;
+        private static IntPtr baseAddress;
 
-        public static void Start()
+        public void Start()
         {
             ProcessCs = Process.GetProcessesByName(NAME_PROCESS)
                 .FirstOrDefault();
 
-            Module = ProcessCs.GetModule(NAME_MODULE_CLIENT);
+            baseAddress = ProcessCs.Modules.Cast<ProcessModule>().SingleOrDefault(m =>
+                string.Equals(m.ModuleName, "client.dll", StringComparison.OrdinalIgnoreCase)).BaseAddress;
 
-            _module = (int)Module.ProcessModule.BaseAddress;
+            var bHopThread = new Thread(BHopScript);
 
-            var bhopThread = new Thread(BhopScript);
-
-            bhopThread.Start();
+            bHopThread.Start();
         }
 
-        private static void BhopScript()
+        private static void BHopScript()
         {
-            /*Memory = new VAMemory("csgo");
+            var localPlayer = ProcessCs.Read<IntPtr>((baseAddress + _offsets.Signatures.DwLocalPlayer));
 
-            var localPlayer = Memory.ReadInt32((IntPtr)(_module + Offsets.dwLocalPlayer));
-
-            if (Memory != null)
+            while (true)
             {
-                while (true)
-                {
-                    int i = GetAsyncKeyState((int)Keys.Space);
+                int i = GetAsyncKeyState((int)Keys.Space);
 
-                    if ((Memory.ReadInt32((IntPtr)localPlayer + Offsets.dwForceJump) == 0) && i is 1 or short.MinValue)
-                    {
-                        Memory.WriteInt32((IntPtr)_module + Offsets.dwForceJump, 6);
-                    }
+                if ((ProcessCs.Read<int>(localPlayer + (_offsets.Netvars.MFFlags)) & 0x0001) == 1 && (i & 0x8000) > 0)
+                {
+                    ProcessCs.Write<IntPtr>(baseAddress + _offsets.Signatures.DwForceJump, 6);
                 }
-            }*/
+            }
+            // ReSharper disable once FunctionNeverReturns
         }
+
+        protected override void FrameAction() { }
     }
 }
 

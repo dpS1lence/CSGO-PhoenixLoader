@@ -6,7 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using CSGO_PhoenixLoader.Common;
+using CSGO_PhoenixLoader.Common.GlobalConstants;
 using CSGO_PhoenixLoader.Helpers;
 
 namespace CSGO_PhoenixLoader.Data
@@ -18,13 +18,17 @@ namespace CSGO_PhoenixLoader.Data
         private GameProcess GameProcess { get; set; }
 
         public Player Player { get; set; }
+
         public Entity[] Entities { get; set; }
 
-        public GameData(GameProcess gameProcess)
+        private Offsets offsets;
+
+        public GameData(GameProcess gameProcess, Offsets _offsets)
         {
             GameProcess = gameProcess;
-            Player = new Player();
-            Entities = Enumerable.Range(0, 64).Select(i => new Entity(i)).ToArray();
+            Player = new Player(offsets);
+            offsets = _offsets;
+            Entities = Enumerable.Range(0, 64).Select(i => new Entity(i, offsets)).ToArray();
         }
 
         public override void Dispose()
@@ -48,22 +52,22 @@ namespace CSGO_PhoenixLoader.Data
             var baseAddress = GameProcess.Process.Modules.Cast<ProcessModule>().SingleOrDefault(m =>
                 string.Equals(m.ModuleName, "client.dll", StringComparison.OrdinalIgnoreCase)).BaseAddress;
             var glowManager = GameProcess.Process.Read<IntPtr>(baseAddress +
-                                                               Offsets.dwGlowObjectManager);
+                                                               offsets.Signatures.DwGlowObjectManager);
            
             foreach (var entity in Entities)
             {
                 //entity.Update(GameProcess);
                 var index = entity.Index;
                 var dwEntity = GameProcess.Process.Read<IntPtr>(baseAddress +
-                                                                Offsets.dwEntityList + index * 0x10);
-                var glowIndex = GameProcess.Process.Read<Int32>(dwEntity + Offsets.m_iGlowIndex);
-                var health = GameProcess.Process.Read<int>(dwEntity + Offsets.m_iHealth);
+                    offsets.Signatures.DwEntityList + index * 0x10);
+                var glowIndex = GameProcess.Process.Read<Int32>(dwEntity + offsets.Netvars.MIGlowIndex);
+                var health = GameProcess.Process.Read<int>(dwEntity + offsets.Netvars.MIHealth);
                 if (health < 1 || health > 100)
                 {
                     continue;
                 }
 
-                var dormant = GameProcess.Process.Read<bool>(dwEntity + Offsets.m_bDormant);
+                var dormant = GameProcess.Process.Read<bool>(dwEntity + offsets.Signatures.MBDormant);
                 if (dormant)
                 {
                     continue;
@@ -84,13 +88,8 @@ namespace CSGO_PhoenixLoader.Data
                 float a = 1;
                 GameProcess.Process.Write<GlowStruct>(glowManager + (glowIndex * 0x38) + 0x8, struct1);
                 GameProcess.Process.Write<GlowSettingsStruct>(glowManager + (glowIndex * 0x38) + 0x28, glowSettingsStruct);
-
-
             }
-            
         }
-
-       
     }
     struct GlowStruct
     {
