@@ -8,6 +8,7 @@ using CSGO_PhoenixLoader.Common.GlobalConstants;
 using CSGO_PhoenixLoader.Common.Math;
 using CSGO_PhoenixLoader.Data;
 using CSGO_PhoenixLoader.Helpers;
+using CSGO_PhoenixLoader.System.DataModels;
 
 namespace CSGO_PhoenixLoader.Hacks
 {
@@ -37,6 +38,7 @@ namespace CSGO_PhoenixLoader.Hacks
 
         protected override void FrameAction()
         {
+            ThreadFrameSleep = TimeSpan.FromMilliseconds(1);
             if (!GameProcess.IsValid)
             {
                 return;
@@ -65,13 +67,14 @@ namespace CSGO_PhoenixLoader.Hacks
                     // shoot
                     Utility.MouseLeftDown();
                     Utility.MouseLeftUp();
-                    Thread.Sleep(5);
+                    Thread.Sleep(1);
                 }
             }
         }
 
         public static int IntersectsHitBox(Line3D aimRayWorld, Entity entity)
         {
+            //Console.WriteLine($"SkeletonCount {entity.SkeletonCount} Team {entity.Team} Health {entity.Health} X {entity.BonesPos[0].X} Y {entity.BonesPos[0].Y} Z {entity.BonesPos[0].Z}");
             for (var hitBoxId = 0; hitBoxId < entity.StudioHitBoxSet.numhitboxes; hitBoxId++)
             {
                 var hitBox = entity.StudioHitBoxes[hitBoxId];
@@ -82,15 +85,12 @@ namespace CSGO_PhoenixLoader.Hacks
                 }
 
                 // intersect capsule
-                var matrixBoneModelToWorld = entity.BonesMatrices[boneId];
-                var boneStartWorld = matrixBoneModelToWorld.Transform(hitBox.bbmin);
-                var boneEndWorld = matrixBoneModelToWorld.Transform(hitBox.bbmax);
-                var boneWorld = new Line3D(boneStartWorld, boneEndWorld);
-                var (p0, p1) = aimRayWorld.ClosestPointsBetween(boneWorld, true);
-                var len = (p1 - p0);
-                Console.WriteLine($"X -> {len.X} Y -> {len.Y} Z -> {len.Z} Entity -> {entity.Health}");
-                var distance = len.Length();
-                if (len.X < hitBox.radius * 0.9f && len.Y < hitBox.radius * 0.9f && len.Z < hitBox.radius * 0.9f)
+                var bonePos = entity.BonesPos[boneId];
+
+                var cPoint = aimRayWorld.ClosestPointOnLine(aimRayWorld.StartPoint, aimRayWorld.EndPoint, bonePos);
+                var len = Distance(cPoint, bonePos);
+                
+                if (len < hitBox.radius * 0.9f)
                 {
                     // intersects
                     return hitBoxId;
@@ -98,6 +98,15 @@ namespace CSGO_PhoenixLoader.Hacks
             }
 
             return -1;
+        }
+
+        public static float Distance(Vector3 point1, Vector3 point2)
+        {
+            float deltaX = point2.X - point1.X;
+            float deltaY = point2.Y - point1.Y;
+            float deltaZ = point2.Z - point1.Z;
+
+            return (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
         }
     }
 }

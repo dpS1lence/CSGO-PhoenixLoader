@@ -74,5 +74,18 @@ namespace CSGO_PhoenixLoader.System.DataModels
         {
             return new Vector3(vector.X * scalar, vector.Y * scalar, vector.Z * scalar);
         }
+
+        public float Magnitude()
+        {
+            return (float)Math.Sqrt(X * X + Y * Y + Z * Z);
+        }
+
+        public void Normalize()
+        {
+            float magnitude = Magnitude();
+            X /= magnitude;
+            Y /= magnitude;
+            Z /= magnitude;
+        }
     }
 }

@@ -37,6 +37,24 @@ namespace CSGO_PhoenixLoader.Common.Math
             return (StartPoint + sc * u, other.StartPoint + tc * v);
         }
 
+        public Vector3 ClosestPointOnLine(Vector3 lineStart, Vector3 lineEnd, Vector3 point)
+        {
+            // Calculate the direction of the line
+            Vector3 lineDirection = lineEnd - lineStart;
+            lineDirection.Normalize();
+
+            // Calculate the vector from the start of the line to the point
+            Vector3 pointDirection = point - lineStart;
+
+            // Calculate the distance along the line to the closest point
+            float distanceAlongLine = Vector3.Dot(pointDirection, lineDirection);
+
+            // Calculate the closest point on the line
+            Vector3 closestPointOnLine = lineStart + lineDirection * distanceAlongLine;
+
+            return closestPointOnLine;
+        }
+
         public (Vector3, Vector3) ClosestPointsBetween(Line3D other, bool mustBeOnSegments)
         {
             if (!IsParallelTo(other) || !mustBeOnSegments)
