@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace CSGO_PhoenixLoader.Hacks
 {
     public class TriggerBot : ThreadedComponent
     {
+        private const string NAME_PROCESS = "csgo";
+
         protected override string ThreadName => nameof(TriggerBot);
 
         private GameProcess GameProcess { get; set; }
@@ -56,24 +59,24 @@ namespace CSGO_PhoenixLoader.Hacks
                 }
 
                 // check if aim ray intersects any hitboxes of entity
-                /*var hitBoxId = IntersectsHitBox(aimRayWorld, entity);
+                var hitBoxId = IntersectsHitBox(aimRayWorld, entity);
                 if (hitBoxId >= 0)
                 {
                     // shoot
                     Utility.MouseLeftDown();
                     Utility.MouseLeftUp();
                     Thread.Sleep(5);
-                }*/
+                }
             }
         }
 
-        /*public static int IntersectsHitBox(Line3D aimRayWorld, Entity entity)
+        public static int IntersectsHitBox(Line3D aimRayWorld, Entity entity)
         {
             for (var hitBoxId = 0; hitBoxId < entity.StudioHitBoxSet.numhitboxes; hitBoxId++)
             {
                 var hitBox = entity.StudioHitBoxes[hitBoxId];
                 var boneId = hitBox.bone;
-                if (boneId < 0 || boneId > Offsets.MAXSTUDIOBONES || hitBox.radius <= 0)
+                if (boneId < 0 || boneId > 128 || hitBox.radius <= 0)
                 {
                     continue;
                 }
@@ -84,8 +87,10 @@ namespace CSGO_PhoenixLoader.Hacks
                 var boneEndWorld = matrixBoneModelToWorld.Transform(hitBox.bbmax);
                 var boneWorld = new Line3D(boneStartWorld, boneEndWorld);
                 var (p0, p1) = aimRayWorld.ClosestPointsBetween(boneWorld, true);
-                var distance = (p1 - p0).Length();
-                if (distance < hitBox.radius * 0.9f /* trigger a little bit inside #1#)
+                var len = (p1 - p0);
+                Console.WriteLine($"X -> {len.X} Y -> {len.Y} Z -> {len.Z} Entity -> {entity.Health}");
+                var distance = len.Length();
+                if (len.X < hitBox.radius * 0.9f && len.Y < hitBox.radius * 0.9f && len.Z < hitBox.radius * 0.9f)
                 {
                     // intersects
                     return hitBoxId;
@@ -93,6 +98,6 @@ namespace CSGO_PhoenixLoader.Hacks
             }
 
             return -1;
-        }*/
+        }
     }
 }

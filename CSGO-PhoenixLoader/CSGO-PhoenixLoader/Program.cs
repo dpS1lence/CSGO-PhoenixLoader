@@ -23,6 +23,8 @@ namespace CSGO_PhoenixLoader
 
         private Offsets Offsets { get; set; }
 
+        private TriggerBot TriggerBot { get; set; }
+
         //private Graphics.Graphics Graphics { get; set; }
 
         public Program()
@@ -40,15 +42,12 @@ namespace CSGO_PhoenixLoader
             GameProcess = new GameProcess();
             GameData = new GameData(GameProcess, Offsets);
             BHop = new BHop(Offsets);
-
-            //WindowOverlay = new WindowOverlay(GameProcess);
-            //Graphics = new Graphics.Graphics(null, null, null);
+            TriggerBot = new TriggerBot(GameProcess, GameData);
 
             BHop.Start();
             GameProcess.Start();
             GameData.Start();
-            //WindowOverlay.Start();
-            //Graphics.Start();
+            TriggerBot.Start(); 
         }
 
         /// <inheritdoc />

@@ -31,11 +31,11 @@ namespace CSGO_PhoenixLoader.System.DataModels
         {
             fixed (Vector3 * vector3Ptr = &this)
             {
-                var num1 = (float)((IntPtr)vector3Ptr + 8);
+                var num1 = vector3Ptr->X;
 
-                var num2 = (float)((IntPtr)vector3Ptr + 4);
+                var num2 = vector3Ptr->Y;
 
-                var num3 = (float)(IntPtr)vector3Ptr;
+                var num3 = vector3Ptr->Z;
 
                 return (float)Math.Sqrt((double)num3 * (double)num3 + (double)num2 * (double)num2 + (double)num1 * (double)num1);
             }
@@ -67,6 +67,10 @@ namespace CSGO_PhoenixLoader.System.DataModels
         }
 
         public static Vector3 operator *(float scalar, Vector3 vector)
+        {
+            return new Vector3(vector.X * scalar, vector.Y * scalar, vector.Z * scalar);
+        }
+        public static Vector3 operator *(Vector3 vector, float scalar)
         {
             return new Vector3(vector.X * scalar, vector.Y * scalar, vector.Z * scalar);
         }
