@@ -84,11 +84,14 @@ namespace CSGO_PhoenixLoader.Hacks
 
             currentEntity.Update(GameProcess);
 
-
-
+           
             if (!currentEntity.IsAlive() || currentEntity.Dormant || currentEntity.Team == player.Team)
             {
                 EntitiesCollection.IgnoredEntities.Add(currentEntity);
+            }
+            else if(Distance(player.EyePosition, currentEntity.BonesPos[8]) > 1000.0f)
+            {
+                return;
             }
             else if (!(currentEntity.AddressBase == player.AddressBase))
             {
@@ -115,27 +118,35 @@ namespace CSGO_PhoenixLoader.Hacks
             return new Vector3(pitch, yaw, 0);
         }
 
-        public static Entity? GetClosestEntity(ICollection<Entity> entities, Vector3 point2)
+        public static Entity? GetClosestEntity(ICollection<Entity> entities, Vector3 player)
         {
             Entity? closestEntity = null;
 
             foreach (var entity in entities.Where(a => a.Team is Team.CounterTerrorists or Team.Terrorists))
             {
-                var deltaX = point2.X - entity.BonesPos[8].X;
-                var deltaY = point2.Y - entity.BonesPos[8].Y;
-                var deltaZ = point2.Z - entity.BonesPos[8].Z;
+                var deltaX = player.X - entity.BonesPos[8].X;
+                var deltaY = player.Y - entity.BonesPos[8].Y;
+                var deltaZ = player.Z - entity.BonesPos[8].Z;
 
                 var currentVector = new Vector3(deltaX, deltaY, deltaZ);
 
                 closestEntity ??= entity;
 
-                if (currentVector > closestEntity.BonesPos[8])
+                if (Distance(player, currentVector) < Distance(player, closestEntity.BonesPos[8]))
                 {
                     closestEntity = entity;
                 }
             }
             
             return closestEntity;
+        }
+        public static float Distance(Vector3 point1, Vector3 point2)
+        {
+            float deltaX = point2.X - point1.X;
+            float deltaY = point2.Y - point1.Y;
+            float deltaZ = point2.Z - point1.Z;
+
+            return (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
         }
     }
 }
