@@ -105,9 +105,7 @@ namespace CSGO_PhoenixLoader.Data
             // read
             for (var i = 0; i < StudioHitBoxSet.numhitboxes; i++)
             {
-                var shit = gameProcess.Process.Read<mstudiobbox_t>
-                    (addressHitBoxSet + StudioHitBoxSet.hitboxindex + i * Marshal.SizeOf<mstudiobbox_t>());
-                StudioHitBoxes[i] = shit;
+                StudioHitBoxes[i] = gameProcess.Process.Read<mstudiobbox_t>(addressHitBoxSet + StudioHitBoxSet.hitboxindex + i * Marshal.SizeOf<mstudiobbox_t>());
             }
         }
 
@@ -154,6 +152,7 @@ namespace CSGO_PhoenixLoader.Data
                     skeletonBoneId++;
                 }
             }
+
             SkeletonCount = skeletonBoneId;
         }
 

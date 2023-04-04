@@ -16,6 +16,10 @@
     <EmbeddedResource Remove="Core\**" />
     <None Remove="Core\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Hacks\Bhop.cs~RF58cd27.TMP" />
+  </ItemGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.WindowsDesktop.App.Wpf" />
 	</ItemGroup>

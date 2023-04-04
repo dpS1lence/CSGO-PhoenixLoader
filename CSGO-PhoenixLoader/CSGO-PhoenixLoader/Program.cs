@@ -17,13 +17,13 @@ namespace CSGO_PhoenixLoader
 
         private GameData GameData { get; set; }
 
-        private WindowOverlay WindowOverlay { get; set; }
-
         private BHop BHop { get; set; }
 
         private Offsets Offsets { get; set; }
 
         private TriggerBot TriggerBot { get; set; }
+
+        private AimBot AimBot { get; set; }
 
         //private Graphics.Graphics Graphics { get; set; }
 
@@ -40,30 +40,42 @@ namespace CSGO_PhoenixLoader
                       ?? throw new ArgumentException("");
 
             GameProcess = new GameProcess();
-            GameData = new GameData(GameProcess, Offsets);
-            BHop = new BHop(Offsets);
-            TriggerBot = new TriggerBot(GameProcess, GameData);
-
-            BHop.Start();
             GameProcess.Start();
+
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            GameData = new GameData(GameProcess, Offsets);
             GameData.Start();
-            TriggerBot.Start(); 
+
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            BHop = new BHop(Offsets);
+            BHop.Start();
+
+            //TriggerBot = new TriggerBot(GameProcess, GameData);
+            //TriggerBot.Start();
+
+            AimBot = new AimBot(GameProcess, GameData, Offsets);
+            AimBot.Start();
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
-            //Graphics.Dispose();
-            //Graphics = default;
-
-            WindowOverlay.Dispose();
-            WindowOverlay = default;
-
             GameData.Dispose();
             GameData = default;
 
             GameProcess.Dispose();
             GameProcess = default;
+
+            BHop.Dispose();
+            BHop = default;
+
+            TriggerBot.Dispose();
+            TriggerBot = default;
+
+            AimBot.Dispose();
+            AimBot = default;
         }
     }
 }

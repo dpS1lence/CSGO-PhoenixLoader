@@ -14,8 +14,6 @@ namespace CSGO_PhoenixLoader.Hacks
 {
     public class TriggerBot : ThreadedComponent
     {
-        private const string NAME_PROCESS = "csgo";
-
         protected override string ThreadName => nameof(TriggerBot);
 
         private GameProcess GameProcess { get; set; }
@@ -39,6 +37,7 @@ namespace CSGO_PhoenixLoader.Hacks
         protected override void FrameAction()
         {
             ThreadFrameSleep = TimeSpan.FromMilliseconds(1);
+
             if (!GameProcess.IsValid)
             {
                 return;
@@ -53,7 +52,7 @@ namespace CSGO_PhoenixLoader.Hacks
             var aimRayWorld = new Line3D(player.EyePosition, player.EyePosition + player.AimDirection * 8192);
 
             // go through entities
-            foreach (var entity in GameData.Entities)
+            foreach (var entity in EntitiesCollection.Entities)
             {
                 if (!entity.IsAlive() || entity.AddressBase == player.AddressBase)
                 {

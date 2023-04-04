@@ -19,8 +19,6 @@ namespace CSGO_PhoenixLoader.Data
 
         public Player Player { get; set; }
 
-        public Entity[] Entities { get; set; }
-
         private Offsets offsets;
 
         public GameData(GameProcess gameProcess, Offsets _offsets)
@@ -28,14 +26,14 @@ namespace CSGO_PhoenixLoader.Data
             GameProcess = gameProcess;
             offsets = _offsets;
             Player = new Player(offsets);
-            Entities = Enumerable.Range(0, 64).Select(i => new Entity(i, offsets)).ToArray();
+            EntitiesCollection.Entities = Enumerable.Range(0, 64).Select(i => new Entity(i, offsets)).ToArray();
         }
 
         public override void Dispose()
         {
             base.Dispose();
 
-            Entities = default;
+            EntitiesCollection.Entities = default;
             Player = default;
             GameProcess = default;
         }
@@ -54,7 +52,7 @@ namespace CSGO_PhoenixLoader.Data
             var glowManager = GameProcess.Process.Read<IntPtr>(baseAddress +
                                                                offsets.Signatures.DwGlowObjectManager);
             Player.Update(GameProcess);
-            foreach (var entity in Entities)
+            foreach (var entity in EntitiesCollection.Entities)
             {
                 //entity.Update(GameProcess);
                 var index = entity.Index;
