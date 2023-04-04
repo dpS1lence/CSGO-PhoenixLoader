@@ -25,6 +25,18 @@ namespace CSGO_PhoenixLoader.System.DataModels
             return new Vector3(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
         }
 
+        public static bool operator >(Vector3 left, Vector3 right)
+        {
+            return left.X > right.X && left.Y > right.Y &&
+                   left.Z > right.Z;
+        }
+
+        public static bool operator <(Vector3 left, Vector3 right)
+        {
+            return left.X < right.X && left.Y < right.Y &&
+                   left.Z < right.Z;
+        }
+
         public override int GetHashCode() => (int)this.Z ^ (int)this.Y ^ (int)this.X;
 
         public unsafe float Length()

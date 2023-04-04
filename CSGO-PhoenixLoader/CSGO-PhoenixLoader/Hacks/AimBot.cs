@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CSGO_PhoenixLoader.System.DataModels;
 using System.Diagnostics;
+using CSGO_PhoenixLoader.Common;
 using CSGO_PhoenixLoader.Common.GlobalConstants;
 
 namespace CSGO_PhoenixLoader.Hacks
@@ -72,9 +73,7 @@ namespace CSGO_PhoenixLoader.Hacks
                 return;
             }
 
-            var eCol = EntitiesCollection.Entities;
-
-            var currentEntity = EntitiesCollection.EntitiesDynamic.FirstOrDefault();
+            var currentEntity = GetClosestEntity(EntitiesCollection.EntitiesDynamic, player.EyePosition);
 
             if (currentEntity == null)
             {
@@ -84,6 +83,8 @@ namespace CSGO_PhoenixLoader.Hacks
             }
 
             currentEntity.Update(GameProcess);
+
+
 
             if (!currentEntity.IsAlive() || currentEntity.Dormant || currentEntity.Team == player.Team)
             {
@@ -114,13 +115,27 @@ namespace CSGO_PhoenixLoader.Hacks
             return new Vector3(pitch, yaw, 0);
         }
 
-        public static Vector3 Distance(Vector3 point1, Vector3 point2)
+        public static Entity? GetClosestEntity(ICollection<Entity> entities, Vector3 point2)
         {
-            var deltaX = point2.X - point1.X;
-            var deltaY = point2.Y - point1.Y;
-            var deltaZ = point2.Z - point1.Z;
+            Entity? closestEntity = null;
 
-            return new Vector3(deltaX, deltaY, deltaZ);
+            foreach (var entity in entities.Where(a => a.Team is Team.CounterTerrorists or Team.Terrorists))
+            {
+                var deltaX = point2.X - entity.BonesPos[8].X;
+                var deltaY = point2.Y - entity.BonesPos[8].Y;
+                var deltaZ = point2.Z - entity.BonesPos[8].Z;
+
+                var currentVector = new Vector3(deltaX, deltaY, deltaZ);
+
+                closestEntity ??= entity;
+
+                if (currentVector > closestEntity.BonesPos[8])
+                {
+                    closestEntity = entity;
+                }
+            }
+            
+            return closestEntity;
         }
     }
 }
