@@ -52,8 +52,8 @@ namespace CSGO_PhoenixLoader
             BHop = new BHop(Offsets);
             BHop.Start();
 
-            //TriggerBot = new TriggerBot(GameProcess, GameData);
-            //TriggerBot.Start();
+            TriggerBot = new TriggerBot(GameProcess, GameData);
+            TriggerBot.Start();
 
             AimBot = new AimBot(GameProcess, GameData, Offsets);
             AimBot.Start();

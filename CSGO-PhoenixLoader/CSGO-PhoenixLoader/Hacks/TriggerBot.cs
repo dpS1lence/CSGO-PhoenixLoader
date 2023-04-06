@@ -8,6 +8,7 @@ using CSGO_PhoenixLoader.Common.GlobalConstants;
 using CSGO_PhoenixLoader.Common.Math;
 using CSGO_PhoenixLoader.Data;
 using CSGO_PhoenixLoader.Helpers;
+using CSGO_PhoenixLoader.System;
 using CSGO_PhoenixLoader.System.DataModels;
 
 namespace CSGO_PhoenixLoader.Hacks
@@ -39,6 +40,13 @@ namespace CSGO_PhoenixLoader.Hacks
             ThreadFrameSleep = TimeSpan.FromMilliseconds(1);
 
             if (!GameProcess.IsValid)
+            {
+                return;
+            }
+
+            var key = User32.GetAsyncKeyState((int)Keys.F17) & 0x8000;
+
+            if (key <= 0)
             {
                 return;
             }

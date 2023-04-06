@@ -85,9 +85,9 @@ namespace CSGO_PhoenixLoader.Hacks
 
             currentEntity.Update(GameProcess);
 
-            var key = User32.GetAsyncKeyState((int)Keys.C) & 0x8000;
+            var key = User32.GetAsyncKeyState((int)Keys.F16) & 0x8000;
 
-            if (key > 0)
+            if (key <= 0)
             {
                 return;
             }
