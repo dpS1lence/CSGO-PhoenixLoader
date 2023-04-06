@@ -10,6 +10,7 @@ using CSGO_PhoenixLoader.System.DataModels;
 using System.Diagnostics;
 using CSGO_PhoenixLoader.Common;
 using CSGO_PhoenixLoader.Common.GlobalConstants;
+using CSGO_PhoenixLoader.System;
 
 namespace CSGO_PhoenixLoader.Hacks
 {
@@ -73,7 +74,7 @@ namespace CSGO_PhoenixLoader.Hacks
                 return;
             }
 
-            var currentEntity = GetClosestEntity(EntitiesCollection.EntitiesDynamic, player.EyePosition);
+            var currentEntity = GetClosestEntityToCrosshair(EntitiesCollection.EntitiesDynamic, player);
 
             if (currentEntity == null)
             {
@@ -84,12 +85,18 @@ namespace CSGO_PhoenixLoader.Hacks
 
             currentEntity.Update(GameProcess);
 
-           
+            var key = User32.GetAsyncKeyState((int)Keys.C) & 0x8000;
+
+            if (key > 0)
+            {
+                return;
+            }
+
             if (!currentEntity.IsAlive() || currentEntity.Dormant || currentEntity.Team == player.Team)
             {
                 EntitiesCollection.IgnoredEntities.Add(currentEntity);
             }
-            else if(Distance(player.EyePosition, currentEntity.BonesPos[8]) > 1000.0f)
+            else if(Distance(player.EyePosition, currentEntity.BonesPos[8]) > 2000.0f)
             {
                 return;
             }
@@ -118,35 +125,64 @@ namespace CSGO_PhoenixLoader.Hacks
             return new Vector3(pitch, yaw, 0);
         }
 
-        public static Entity? GetClosestEntity(ICollection<Entity> entities, Vector3 player)
+        private static Entity? GetClosestEntityToCrosshair(ICollection<Entity> entities, Player player)
         {
             Entity? closestEntity = null;
 
             foreach (var entity in entities.Where(a => a.Team is Team.CounterTerrorists or Team.Terrorists))
             {
-                var deltaX = player.X - entity.BonesPos[8].X;
-                var deltaY = player.Y - entity.BonesPos[8].Y;
-                var deltaZ = player.Z - entity.BonesPos[8].Z;
+                var aimRayWorld = new Line3D(player.EyePosition, player.EyePosition + player.AimDirection * 8192);
 
-                var currentVector = new Vector3(deltaX, deltaY, deltaZ);
-
-                closestEntity ??= entity;
-
-                if (Distance(player, currentVector) < Distance(player, closestEntity.BonesPos[8]))
+                var hitBoxId = AimHitBox(aimRayWorld, entity, 10.9f);
+                if (hitBoxId >= 0)
                 {
                     closestEntity = entity;
+                    break;
                 }
             }
-            
+
             return closestEntity;
         }
-        public static float Distance(Vector3 point1, Vector3 point2)
+        private static float Distance(Vector3 point1, Vector3 point2)
         {
-            float deltaX = point2.X - point1.X;
-            float deltaY = point2.Y - point1.Y;
-            float deltaZ = point2.Z - point1.Z;
+            var deltaX = point2.X - point1.X;
+            var deltaY = point2.Y - point1.Y;
+            var deltaZ = point2.Z - point1.Z;
 
             return (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+        }
+
+        private static int AimHitBox(Line3D aimRayWorld, Entity entity, float radius)
+        {
+            var lengthDistances = new Dictionary<float, int>();
+
+            for (var hitBoxId = 0; hitBoxId < entity.StudioHitBoxSet.numhitboxes; hitBoxId++)
+            {
+                var hitBox = entity.StudioHitBoxes[hitBoxId];
+                var boneId = hitBox.bone;
+                if (boneId < 0 || boneId > 128 || hitBox.radius <= 0)
+                {
+                    continue;
+                }
+
+                // intersect capsule
+                var bonePos = entity.BonesPos[boneId];
+
+                var cPoint = aimRayWorld.ClosestPointOnLine(aimRayWorld.StartPoint, aimRayWorld.EndPoint, bonePos);
+                var len = Distance(cPoint, bonePos);
+
+                if (len < hitBox.radius * radius)
+                {
+                    lengthDistances.Add(len, hitBoxId);
+                }
+            }
+
+            if (lengthDistances.Count > 0)
+            {
+                return lengthDistances.OrderBy(a => a.Key).FirstOrDefault().Value;
+            }
+
+            return -1;
         }
     }
 }

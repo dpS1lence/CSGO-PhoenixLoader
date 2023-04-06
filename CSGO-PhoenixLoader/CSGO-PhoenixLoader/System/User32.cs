@@ -44,6 +44,9 @@ namespace CSGO_PhoenixLoader.System
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern uint SendInput(uint nInputs, ref Input pInputs, int cbSize);
+
+        [DllImport("User32.dll")]
+        public static extern short GetAsyncKeyState(int vKey);
     }
 
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CSGO_PhoenixLoader.Helpers;
 using CSGO_PhoenixLoader.Common.GlobalConstants;
 using CSGO_PhoenixLoader.Data;
+using CSGO_PhoenixLoader.System;
 using CSGO_PhoenixLoader.System.DataModels;
 
 namespace CSGO_PhoenixLoader.Hacks
@@ -21,9 +22,6 @@ namespace CSGO_PhoenixLoader.Hacks
         {
             _offsets = offsets;
         }
-
-        [DllImport("User32.dll")]
-        private static extern short GetAsyncKeyState(int vKey);
 
         private static Process ProcessCs { get; set; } = null!;
 
@@ -53,11 +51,11 @@ namespace CSGO_PhoenixLoader.Hacks
 
             while (true)
             {
-                var keys = GetAsyncKeyState((int)Keys.Space) & 0x8000;
-                var forward = GetAsyncKeyState((int)Keys.W) & 0x8000;
-                var backward = GetAsyncKeyState((int)Keys.S) & 0x8000;
-                var left = GetAsyncKeyState((int)Keys.A) & 0x8000;
-                var right = GetAsyncKeyState((int)Keys.D) & 0x8000;
+                var keys = User32.GetAsyncKeyState((int)Keys.Space) & 0x8000;
+                var forward = User32.GetAsyncKeyState((int)Keys.W) & 0x8000;
+                var backward = User32.GetAsyncKeyState((int)Keys.S) & 0x8000;
+                var left = User32.GetAsyncKeyState((int)Keys.A) & 0x8000;
+                var right = User32.GetAsyncKeyState((int)Keys.D) & 0x8000;
 
                 var currentAngles = ProcessCs.Read<Vector3>(viewAngles);
 
