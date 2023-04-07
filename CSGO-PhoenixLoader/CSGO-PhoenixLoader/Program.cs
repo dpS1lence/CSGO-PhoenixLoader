@@ -24,6 +24,7 @@ namespace CSGO_PhoenixLoader
         private TriggerBot TriggerBot { get; set; }
 
         private AimBot AimBot { get; set; }
+        private AntiFlash AntiFlash { get; set; }
 
         //private Graphics.Graphics Graphics { get; set; }
 
@@ -49,14 +50,23 @@ namespace CSGO_PhoenixLoader
 
             Thread.Sleep(TimeSpan.FromSeconds(1));
 
-            BHop = new BHop(Offsets);
+            BHop = new BHop(Offsets, GameProcess.Process);
             BHop.Start();
+            Console.WriteLine("BHop enabled - Phoenix Loader!");
+
+            Thread.Sleep(TimeSpan.FromSeconds(1));
 
             TriggerBot = new TriggerBot(GameProcess, GameData);
             TriggerBot.Start();
+            Console.WriteLine("TriggerBot enabled - Phoenix Loader!");
 
             AimBot = new AimBot(GameProcess, GameData, Offsets);
             AimBot.Start();
+            Console.WriteLine("AimBot enabled - Phoenix Loader!");
+
+            AntiFlash = new AntiFlash(GameProcess);
+            //AntiFlash.Start();
+            Console.WriteLine("ClanTag enabled - Phoenix Loader!");
         }
 
         /// <inheritdoc />

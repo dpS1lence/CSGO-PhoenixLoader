@@ -80,10 +80,10 @@ namespace CSGO_PhoenixLoader.Data
                     blue = 1,
                     alpha = 1,
                 };
-                float r = 255;
+                /*float r = 255;
                 float g = 251;
                 float b = 0;
-                float a = 1;
+                float a = 1;*/
                 GameProcess.Process.Write<GlowStruct>(glowManager + (glowIndex * 0x38) + 0x8, struct1);
                 GameProcess.Process.Write<GlowSettingsStruct>(glowManager + (glowIndex * 0x38) + 0x28, glowSettingsStruct);
 
