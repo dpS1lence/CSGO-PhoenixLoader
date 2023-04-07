@@ -54,6 +54,10 @@ namespace CSGO_PhoenixLoader.Data
             Player.Update(GameProcess);
             foreach (var entity in EntitiesCollection.Entities)
             {
+                if (entity.Team == Player.Team)
+                {
+                    continue;
+                }
                 //entity.Update(GameProcess);
                 var index = entity.Index;
                 var dwEntity = GameProcess.Process.Read<IntPtr>(baseAddress +
