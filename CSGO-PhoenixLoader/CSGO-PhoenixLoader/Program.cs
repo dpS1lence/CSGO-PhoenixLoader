@@ -24,18 +24,19 @@ namespace CSGO_PhoenixLoader
         private TriggerBot TriggerBot { get; set; }
 
         private AimBot AimBot { get; set; }
-        private AntiFlash AntiFlash { get; set; }
+
+        private ClanTagChanger ClanTagChanger { get; set; }
 
         //private Graphics.Graphics Graphics { get; set; }
 
-        public Program()
+        private Program()
         {
             Startup += (sender, args) => Ctor();
             Exit += (sender, args) => Dispose();
         }
 
         /// <summary />
-        public void Ctor()
+        private void Ctor()
         {
             Offsets = OffsetsService.GetAllOffsetsJson("https://raw.githubusercontent.com/frk1/hazedumper/master/csgo.json")
                       ?? throw new ArgumentException("");
@@ -60,13 +61,17 @@ namespace CSGO_PhoenixLoader
             TriggerBot.Start();
             Console.WriteLine("TriggerBot enabled - Phoenix Loader!");
 
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
             AimBot = new AimBot(GameProcess, GameData, Offsets);
             AimBot.Start();
             Console.WriteLine("AimBot enabled - Phoenix Loader!");
 
-            AntiFlash = new AntiFlash(GameProcess);
-            //AntiFlash.Start();
-            Console.WriteLine("ClanTag enabled - Phoenix Loader!");
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            ClanTagChanger = new ClanTagChanger(GameProcess.Process, Offsets);
+            ClanTagChanger.SetClantag("Phoenix Loader");
+            Console.WriteLine("ClanTagChanger enabled - Phoenix Loader!");
         }
 
         /// <inheritdoc />
