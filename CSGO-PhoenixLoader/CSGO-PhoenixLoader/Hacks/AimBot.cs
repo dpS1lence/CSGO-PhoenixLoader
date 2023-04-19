@@ -173,7 +173,11 @@ namespace CSGO_PhoenixLoader.Hacks
 
                 if (len < hitBox.radius * radius)
                 {
-                    lengthDistances.Add(len, hitBoxId);
+                    if (!lengthDistances.ContainsKey(len))
+                    {
+                        lengthDistances.Add(len, hitBoxId);
+                    }
+                   
                 }
             }
 
